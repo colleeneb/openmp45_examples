@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 exe=(02_target_construct 03_target_teams 03_target_teams_parallel \
       04_target_teams_distribute 04_target_teams_distribute_parallel \
@@ -9,5 +9,6 @@ exe=(02_target_construct 03_target_teams 03_target_teams_parallel \
 
 for i in ${exe[@]}
 do
+    echo Running $i
 	./$i
 done

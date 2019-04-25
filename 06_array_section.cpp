@@ -1,7 +1,8 @@
 #include "stdio.h"
 
-#define BIG 100
-#define N (1024*1024)
+#define BIG 128
+//#define N (1024*1024)
+#define N (512*512)
 int a[N*BIG];
 
 int main()
