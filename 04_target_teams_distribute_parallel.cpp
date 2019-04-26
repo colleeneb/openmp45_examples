@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <omp.h>
-#define N 1024
+#define N 20
 int main( int argv, char** argc ) {
   int x[N];
   int y[N];
@@ -13,13 +13,24 @@ int main( int argv, char** argc ) {
 
   // splits the "N" in two, gives half to each team
 #pragma omp target teams map(from:y[:N]) map(to:x[:N]) num_teams(2)
-#pragma omp distribute dist_schedule(static,N/2)
+#pragma omp distribute
   for(int j=0; j<N; j+=N/2 )
     {
 #pragma omp parallel num_threads(4)
 #pragma omp for
       for(int i=j; i< j+N/2; i++)
-	y[i] = x[i];
+	{
+	  y[i] = x[i];
+      int team = omp_get_team_num();
+      int nteams = omp_get_num_teams();
+      int tid = omp_get_thread_num(); 
+      int nthreads = omp_get_num_threads();
+
+      printf( "Iteration %d given to thread %d from team %d.\n",
+	      i,tid, team );
+
+	}
+
     }
 
   // error check

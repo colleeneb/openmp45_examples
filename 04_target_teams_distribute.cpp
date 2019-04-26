@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <omp.h>
-#define N 1024
+#define N 20
 int main( int argv, char** argc ) {
   int x[N];
   int y[N];
@@ -11,18 +11,18 @@ int main( int argv, char** argc ) {
       x[i] = i;
     }
 
-#pragma omp target teams map(from:y[:N]) map(to:x[:N]) num_teams(4)
+#pragma omp target teams map(from:y[:N]) map(to:x[:N]) num_teams(2)
 #pragma omp distribute
   for(int i=0; i<N; i++ )
     {
       y[i] = x[i];
       int team = omp_get_team_num();
       int nteams = omp_get_num_teams();
-      int tid = omp_get_thread_num();
-      int nthreads = omp_get_num_threads(); 
+      int tid = omp_get_thread_num(); // always 0
+      int nthreads = omp_get_num_threads();  // always 1
 
-      printf( "i:%d for Team %d out of %d teams\nThread %d of out %d threads in the team.\n",
-	      i,team, nteams, tid, nthreads );
+      printf( "Iteration %d given to thread %d from team %d.\n",
+	      i,tid, team );
 
     }
 
